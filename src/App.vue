@@ -10,13 +10,16 @@
         </v-row>
       </v-container>
 
-      <!-- weather cards -->
+      <!-- weather cards 瀑布流排版 -->
       <v-container>
-        <v-row>
-          <v-col v-for="(place, index) in places" :key="index" cols="12" md="4">
-            <WeatherCard :place="place" />
-          </v-col>
-        </v-row>
+        <div class="masonry-grid">
+          <WeatherCard
+            v-for="(place, index) in places"
+            :key="index"
+            :place="place"
+            class="masonry-item"
+          />
+        </div>
       </v-container>
     </v-main>
   </v-app>
@@ -31,3 +34,27 @@ const places = ref([]);
 
 const addPlace = (place) => places.value.unshift(place);
 </script>
+
+<style scoped>
+.masonry-grid {
+  column-count: 3;
+  column-gap: 16px;
+}
+
+.masonry-item {
+  break-inside: avoid;
+  margin-bottom: 16px;
+}
+
+@media (max-width: 1200px) {
+  .masonry-grid {
+    column-count: 2;
+  }
+}
+
+@media (max-width: 600px) {
+  .masonry-grid {
+    column-count: 1;
+  }
+}
+</style>

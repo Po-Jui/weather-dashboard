@@ -130,7 +130,14 @@ watch(model, (newValue, oldValue) => {
   background-image: linear-gradient(62deg, #007df9 0%, #e0c3fc 100%);
 }
 .bg-night {
-  background-color: #07223d;
-  background-image: linear-gradient(62deg, #0a2a4a 0%, #270845 100%);
+  background-image: linear-gradient(
+      62deg,
+      rgba(10, 42, 74, 0.7) 0%,
+      rgba(39, 8, 69, 0.7) 100%
+    ),
+    url("https://i.gifer.com/CsTv.gif");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 </style>
