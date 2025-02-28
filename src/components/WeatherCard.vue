@@ -5,12 +5,11 @@
   >
     <!-- Location & time -->
     <v-row class="mt-2">
-      <v-col class="d-flex align-center ml-4">
+      <v-col class="d-flex align-center ml-2">
         <v-icon class="me-2">mdi-map-marker</v-icon>
         <h3 class="text-lg">{{ place.location.name }}</h3>
-        <!-- Smaller font size -->
       </v-col>
-      <v-col class="d-flex align-center ml-2">
+      <v-col class="d-flex align-left ml-5">
         <v-switch
           v-model="model"
           :label="`&deg;${model ? 'C' : 'F'}`"
@@ -18,7 +17,7 @@
           inset
         ></v-switch>
       </v-col>
-      <v-col class="d-flex align-center justify-end pe-4 mr-4">
+      <v-col class="d-flex align-center justify-end pe-4 mr-2">
         <v-icon class="me-2">mdi-clock-outline</v-icon>
         <h3 class="text-lg">
           {{ new Date(place.location.localtime).getHours() }}:{{
