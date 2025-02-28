@@ -32,18 +32,22 @@ import { ref } from "vue";
 
 const places = ref([]);
 
-const addPlace = (place) => places.value.unshift(place);
+// const history = ref([]);
+const addPlace = (place) => {
+  places.value.unshift(place);
+};
+// console.log(history.value);
 </script>
 
 <style scoped>
 .masonry-grid {
   column-count: 3;
-  column-gap: 16px;
+  column-gap: 12px;
 }
 
 .masonry-item {
   break-inside: avoid;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
 }
 
 @media (max-width: 1200px) {
