@@ -5,19 +5,11 @@
   >
     <!-- Location & time -->
     <v-row class="mt-2">
-      <v-col class="d-flex align-center ml-2">
+      <v-col class="d-flex align-center ml-4">
         <v-icon class="me-2">mdi-map-marker</v-icon>
         <h3 class="text-lg">{{ place.location.name }}</h3>
       </v-col>
-      <v-col class="d-flex align-left ml-5">
-        <v-switch
-          v-model="model"
-          :label="`&deg;${model ? 'C' : 'F'}`"
-          hide-details
-          inset
-        ></v-switch>
-      </v-col>
-      <v-col class="d-flex align-center justify-end pe-4 mr-2">
+      <v-col class="d-flex align-center justify-end pe-4 mr-4">
         <v-icon class="me-2">mdi-clock-outline</v-icon>
         <h3 class="text-lg">
           {{ new Date(place.location.localtime).getHours() }}:{{
@@ -39,6 +31,16 @@
         class="mx-auto"
         contain
       ></v-img>
+      <v-row style="margin-top: -20px">
+        <v-col class="d-flex justify-center ml-4">
+          <v-switch
+            v-model="model"
+            :label="`&deg;${model ? 'C' : 'F'}`"
+            hide-details
+            inset
+          ></v-switch>
+        </v-col>
+      </v-row>
       <h1 class="mr-4 ml-6" style="font: 5em sans-serif">
         <span v-if="!model">{{ Math.round(place.current.temp_f) }}&deg;F</span>
         <span v-else>{{ Math.round(place.current.temp_c) }}&deg;C</span>
