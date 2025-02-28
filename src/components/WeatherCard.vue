@@ -10,6 +10,14 @@
         <h3 class="text-lg">{{ place.location.name }}</h3>
         <!-- Smaller font size -->
       </v-col>
+      <v-col class="d-flex align-center ml-2">
+        <v-switch
+          v-model="model"
+          :label="`&deg;${model ? 'C' : 'F'}`"
+          hide-details
+          inset
+        ></v-switch>
+      </v-col>
       <v-col class="d-flex align-center justify-end pe-4 mr-4">
         <v-icon class="me-2">mdi-clock-outline</v-icon>
         <h3 class="text-lg">
@@ -33,7 +41,8 @@
         contain
       ></v-img>
       <h1 class="mr-4 ml-6" style="font: 5em sans-serif">
-        {{ Math.round(place.current.temp_c) }}&deg;
+        <span v-if="!model">{{ Math.round(place.current.temp_f) }}&deg;F</span>
+        <span v-else>{{ Math.round(place.current.temp_c) }}&deg;C</span>
       </h1>
       <p class="text-lg">{{ place.current.condition.text }}</p>
     </v-card-text>
@@ -59,7 +68,7 @@
         <!-- forecast  -->
         <v-row v-for="(day, index) in place.forecast.forecastday" :key="index">
           <v-col>
-            <WeatherForecastDay :day="day" />
+            <WeatherForecastDay :day="day" :degreeType="model" />
           </v-col>
         </v-row>
 
@@ -90,7 +99,7 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import BorderLine from "./BorderLine.vue";
 import WeatherForecastDay from "./WeatherForecastDay.vue";
 import WeatherInfo from "./WeatherInfo.vue";
@@ -103,6 +112,15 @@ const showDetail = ref(false);
 const active = ref(false);
 
 const showMore = ref(false);
+
+const model = ref(true);
+
+// 監聽 model 的變化
+watch(model, (newValue, oldValue) => {
+  console.log("model 變化：", oldValue, "→", newValue);
+  // 更新用戶選擇
+  // localStorage.setItem("degreeType", newValue ? "C" : "F");
+});
 </script>
 
 <style scoped>
