@@ -1,30 +1,6 @@
 <template>
   <v-app>
     <v-main>
-      <!-- Date -->
-      <v-container class="text-center">
-        <v-row justify="center">
-          <v-col cols="12">
-            <h1
-              style="
-                font-weight: 900;
-                font-family: 'Courier New', Courier, monospace;
-                margin-bottom: -50px;
-              "
-            >
-              {{
-                new Date().toLocaleDateString("zh-TW", {
-                  weekday: "long",
-                  year: "numeric",
-                  month: "long",
-                  day: "numeric",
-                })
-              }}
-            </h1>
-          </v-col>
-        </v-row>
-      </v-container>
-
       <!-- search -->
       <v-container>
         <v-row justify="center">

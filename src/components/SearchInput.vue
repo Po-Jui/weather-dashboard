@@ -7,6 +7,7 @@
           max-height="480"
           max-width="650"
           src="https://risingnepaldaily.com/storage/media/47278/Untitled-1.gif"
+          style="border-radius: 10px"
         ></v-img>
       </v-col>
     </v-row>
