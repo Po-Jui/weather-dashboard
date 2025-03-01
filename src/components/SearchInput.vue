@@ -31,7 +31,7 @@
         class="position-absolute w-100"
         style="top: 100%; z-index: 10"
       >
-        <v-list>
+        <v-list v-if="searchTerm.results.length > 0">
           <v-list-item
             v-for="place in searchTerm.results"
             :key="place.id"
@@ -41,6 +41,11 @@
             <v-list-item-title>
               {{ place.name }}, {{ place.region }}, {{ place.country }}
             </v-list-item-title>
+          </v-list-item>
+        </v-list>
+        <v-list v-else>
+          <v-list-item>
+            <v-list-item-title>⚠️ No results found ⚠️</v-list-item-title>
           </v-list-item>
         </v-list>
       </v-card>

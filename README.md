@@ -15,6 +15,7 @@ Weather Dashboard 是一款即時天氣查詢應用，使用者可以輸入城�
 ## 技術與工具
 
 - **前端框架**：使用 Vue.js 建構。
+- **UI 框架** : 使用 Vuetify。
 - **API 整合**：透過 OpenWeather API 獲取即時天氣數據。
 - **本地存儲 (Local Storage)**：用來保存使用者的查詢歷史。
 - **瀑布式排列 (Masonry Layouts)**：以瀑布式排列 UI 呈現方式。
