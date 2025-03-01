@@ -67,13 +67,17 @@
           <span class="text-body-2 text-opacity-50"
             >last update: {{ place.current.last_updated }}</span
           >
+          <v-btn
+            class="hover-red ml-15"
+            @click="$emit('remove-place')"
+            icon
+            variant="text"
+            color="black"
+          >
+            <v-icon size="1.5rem">mdi-delete</v-icon>
+          </v-btn>
         </v-col>
       </v-col>
-      <!-- <v-col class="text-right">
-        <v-btn @click="$emit('remove-place')" icon>
-          <v-icon>mdi-delete</v-icon>
-        </v-btn>
-      </v-col> -->
     </v-row>
   </v-card>
 </template>
@@ -83,3 +87,9 @@ defineProps({
   place: Object,
 });
 </script>
+
+<style scoped>
+.hover-red:hover {
+  color: red !important;
+}
+</style>

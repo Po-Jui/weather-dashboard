@@ -19,7 +19,8 @@
         variant="outlined"
         prepend-inner-icon="mdi-magnify"
         hide-details
-        @input="handleSearch"
+        :loading="isLoading"
+        @update:modelValue="handleSearch"
         @focus="showHistory = true"
         @blur="hideHistory"
       ></v-text-field>
@@ -71,6 +72,8 @@
 <script setup>
 import { reactive, ref } from "vue";
 
+const isLoading = ref(false);
+
 const emit = defineEmits(["place-data"]);
 
 const searchTerm = reactive({
@@ -85,9 +88,11 @@ const history = reactive({
   id: "",
   icon: null,
 });
-const historyList = localStorage.getItem("historyList")
-  ? JSON.parse(localStorage.getItem("historyList"))
-  : reactive([]);
+const historyList = reactive(
+  localStorage.getItem("historyList")
+    ? JSON.parse(localStorage.getItem("historyList"))
+    : []
+);
 
 const showHistory = ref(false);
 
@@ -98,66 +103,82 @@ const hideHistory = () => {
 };
 const handleSearch = () => {
   clearTimeout(searchTerm.timeout);
-  searchTerm.timeout = setTimeout(async () => {
-    if (searchTerm.query !== "") {
-      const res = await fetch(
-        `https://api.weatherapi.com/v1/search.json?key=${process.env.VUE_APP_WEATHERAPI_KEY}&q=${searchTerm.query}`
-      ).catch((err) => console.log(err));
+  isLoading.value = true; // 立即顯示 loading
 
-      const data = await res.json();
-      searchTerm.results = data;
-      console.log(searchTerm.results);
+  searchTerm.timeout = setTimeout(async () => {
+    if (searchTerm.query.trim() !== "") {
+      try {
+        const res = await fetch(
+          `https://api.weatherapi.com/v1/search.json?key=${process.env.VUE_APP_WEATHERAPI_KEY}&q=${searchTerm.query}`
+        );
+        const data = await res.json();
+        searchTerm.results = data;
+        // console.log(searchTerm.results);
+      } catch (err) {
+        console.log(err);
+      }
     } else {
       searchTerm.results = null;
     }
+    isLoading.value = false; // 結束 loading
   }, 500);
 };
 
 const getWeather = async (id) => {
-  const res = await fetch(
-    `https://api.weatherapi.com/v1/forecast.json?key=${process.env.VUE_APP_WEATHERAPI_KEY}&q=id:${id}&days=5&aqi=no&alerts=no`
-  ).catch((err) => console.log(err));
-  showHistory.value = false;
-  const data = await res.json();
-  console.log(data);
+  try {
+    const res = await fetch(
+      `https://api.weatherapi.com/v1/forecast.json?key=${process.env.VUE_APP_WEATHERAPI_KEY}&q=id:${id}&days=5&aqi=no&alerts=no`
+    );
 
-  // 建立 history 的複本
-  const newHistory = {
-    name: data.location.name,
-    region: data.location.region,
-    country: data.location.country,
-    id: id,
-    icon: data.current.condition.icon,
-  };
+    if (!res.ok) {
+      throw new Error(`API 回應錯誤: ${res.status} ${res.statusText}`);
+    }
 
-  // 將複本加入 historyList
-  historyList.unshift(newHistory);
+    let data = await res.json();
+    showHistory.value = false;
 
-  // 刪除重複的 history
-  const uniqueHistoryList = historyList.filter(
-    (item, index, self) =>
-      index ===
-      self.findIndex(
-        (t) => t.name === item.name && t.id === item.id && t.icon === item.icon
-      )
-  );
+    data = {
+      ...data,
+      id: `id-${Date.now()}-${Math.floor(Math.random() * 10000)}`,
+    };
 
-  // 更新 historyList
-  historyList.splice(0, historyList.length, ...uniqueHistoryList);
+    // 建立 history 的複本
+    const newHistory = {
+      name: data.location.name,
+      region: data.location.region,
+      country: data.location.country,
+      id: id,
+      icon: data.current.condition.icon,
+    };
 
-  // 將 historyList 存入 localStorage
-  if (historyList.length > 5) {
-    historyList.pop();
+    // 將複本加入 historyList
+    historyList.unshift(newHistory);
+
+    // 刪除重複的 history
+    const uniqueHistoryList = historyList.filter(
+      (item, index, self) =>
+        index ===
+        self.findIndex(
+          (t) =>
+            t.name === item.name && t.id === item.id && t.icon === item.icon
+        )
+    );
+
+    // 更新 historyList
+    historyList.splice(0, historyList.length, ...uniqueHistoryList);
+
+    // 將 historyList 存入 localStorage
+    if (historyList.length > 5) {
+      historyList.pop();
+    }
     localStorage.setItem("historyList", JSON.stringify(historyList));
-  } else {
-    localStorage.setItem("historyList", JSON.stringify(historyList));
+
+    emit("place-data", data);
+
+    searchTerm.query = "";
+    searchTerm.results = null;
+  } catch (error) {
+    console.error("獲取天氣資訊時發生錯誤:", error);
   }
-
-  console.log(historyList);
-
-  emit("place-data", data);
-
-  searchTerm.query = "";
-  searchTerm.results = null;
 };
 </script>

@@ -10,15 +10,9 @@
         <h3 class="text-lg">{{ place.location.name }}</h3>
       </v-col>
       <v-col class="d-flex align-center justify-end pe-4 mr-4">
-        <v-icon class="me-2">mdi-clock-outline</v-icon>
-        <h3 class="text-lg">
-          {{ new Date(place.location.localtime).getHours() }}:{{
-            String(new Date(place.location.localtime).getMinutes()).padStart(
-              2,
-              "0"
-            )
-          }}
-        </h3>
+        <v-icon class="me-2" size="2rem" @click="toggleBookmark(place)">
+          mdi-bookmark
+        </v-icon>
       </v-col>
     </v-row>
 
@@ -45,7 +39,20 @@
         <span v-if="!model">{{ Math.round(place.current.temp_f) }}&deg;F</span>
         <span v-else>{{ Math.round(place.current.temp_c) }}&deg;C</span>
       </h1>
-      <p class="text-lg">{{ place.current.condition.text }}</p>
+      <p class="text-lg mt-2">{{ place.current.condition.text }}</p>
+      <v-row class="mt-2">
+        <v-col class="d-flex align-center justify-center pe-4">
+          <v-icon class="me-2">mdi-clock-outline</v-icon>
+          <h3 class="text-lg">
+            {{ new Date(place.location.localtime).getHours() }}:{{
+              String(new Date(place.location.localtime).getMinutes()).padStart(
+                2,
+                "0"
+              )
+            }}
+          </h3>
+        </v-col>
+      </v-row>
     </v-card-text>
 
     <!-- show more days & details -->
@@ -83,7 +90,7 @@
             <WeatherInfo
               :place="place"
               @close-info="showDetail = false"
-              @remove-place="removePlace(place.location.name)"
+              @remove-place="removePlace(place.id)"
             />
           </v-card-text>
         </v-expand-transition>
@@ -100,7 +107,7 @@
 </template>
 
 <script setup>
-import { ref, watch } from "vue";
+import { ref, watch, onMounted, reactive } from "vue";
 import BorderLine from "./BorderLine.vue";
 import WeatherForecastDay from "./WeatherForecastDay.vue";
 import WeatherInfo from "./WeatherInfo.vue";
@@ -108,19 +115,26 @@ import WeatherInfo from "./WeatherInfo.vue";
 defineProps({
   place: Object,
 });
-
-const showDetail = ref(false);
-const active = ref(false);
-
 const showMore = ref(false);
+const showDetail = ref(false);
 
-const model = ref(true);
+const model = ref(true); // 攝氏華氏切換預設為 C
+
+const emit = defineEmits(["delete-place"]);
+
+const removePlace = (id) => {
+  emit("delete-place", id);
+  showDetail.value = false;
+  showMore.value = false;
+};
 
 // 監聽 model 的變化
 watch(model, (newValue, oldValue) => {
   console.log("model 變化：", oldValue, "→", newValue);
-  // 更新用戶選擇
-  // localStorage.setItem("degreeType", newValue ? "C" : "F");
+});
+watch(showMore, (newValue, oldValue) => {
+  console.log("showMore 變化：", oldValue, "→", newValue);
+  if (!newValue) showDetail.value = false;
 });
 </script>
 
