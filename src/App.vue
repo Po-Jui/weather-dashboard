@@ -44,7 +44,6 @@ const isLoading = ref(false);
 const places = ref([]);
 
 const addPlace = (place) => {
-  console.log(place);
   isLoading.value = true; // 開始 loading
 
   setTimeout(() => {
@@ -60,8 +59,6 @@ const addPlace = (place) => {
 };
 
 const deletePlace = (id, name) => {
-  console.log(name);
-  console.log(places.value);
   Swal.fire({
     title: "Are you sure?",
     text: "You won't be able to revert this!",

@@ -113,7 +113,6 @@ const handleSearch = () => {
         );
         const data = await res.json();
         searchTerm.results = data;
-        // console.log(searchTerm.results);
       } catch (err) {
         console.log(err);
       }

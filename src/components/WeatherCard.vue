@@ -128,12 +128,7 @@ const removePlace = (id, name) => {
   showMore.value = false;
 };
 
-// 監聽 model 的變化
-watch(model, (newValue, oldValue) => {
-  console.log("model 變化：", oldValue, "→", newValue);
-});
 watch(showMore, (newValue, oldValue) => {
-  console.log("showMore 變化：", oldValue, "→", newValue);
   if (!newValue) showDetail.value = false;
 });
 </script>
