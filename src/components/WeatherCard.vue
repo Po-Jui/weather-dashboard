@@ -90,7 +90,7 @@
             <WeatherInfo
               :place="place"
               @close-info="showDetail = false"
-              @remove-place="removePlace(place.id)"
+              @remove-place="removePlace(place.id, place.location.name)"
             />
           </v-card-text>
         </v-expand-transition>
@@ -122,8 +122,8 @@ const model = ref(true); // 攝氏華氏切換預設為 C
 
 const emit = defineEmits(["delete-place"]);
 
-const removePlace = (id) => {
-  emit("delete-place", id);
+const removePlace = (id, name) => {
+  emit("delete-place", id, name);
   showDetail.value = false;
   showMore.value = false;
 };

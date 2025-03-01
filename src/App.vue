@@ -59,7 +59,7 @@ const addPlace = (place) => {
   }, 1000); // 模擬 1 秒的處理時間
 };
 
-const deletePlace = (id) => {
+const deletePlace = (id, name) => {
   console.log(name);
   console.log(places.value);
   Swal.fire({
